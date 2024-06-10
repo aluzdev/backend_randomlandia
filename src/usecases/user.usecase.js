@@ -1,4 +1,4 @@
-const User = require("../models/model_user");
+const User = require("../models/user.model");
 
 async function create() {
   try {
@@ -77,4 +77,4 @@ async function update(id) {
   }
 }
 //CRUD - Create Read Update Delete
-module.exports = router;
+module.exports = { create, getAll, getById, deleteById, update };
