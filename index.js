@@ -10,6 +10,7 @@ db.connect()
   .then(() => {
     console.log("DB Connected");
 
+    //cuando terminemos de conectarnos a la base de datos, levantamos el servidor
     server.listen(port, () => {
       console.log(`Server is listening on port: ${port}`);
     });
