@@ -1,34 +1,25 @@
 const User = require("../models/user.model");
 
-async function create() {
+//create user ♥
+async function create(newUser) {
   try {
-    let newUser = req.body;
-    const user = await User.findOne({ email: newUser.email });
-    if (user) {
-      return res.status(201).send(`user already exists`);
+    const isDuplicateUser = await User.findOne({ email: newUser.email }); //busco si el usuario ya existe
+    if (isDuplicateUser) {
+      throw new Error("User already exists");
     }
     newUser.password = await User.encryptPassword(newUser.password);
     const data = await User.create(newUser);
     await data.save();
-
-    console.log(`User saved successfuly:`, data);
-    res.status(201).send(data);
-
-    console.log(data);
+    return data;
   } catch (err) {
-    console.error(err);
-    res.status(400).send({ error: err, msg: err.message });
+    throw new Error(err.message);
   }
 }
 
-async function getAll() {
-  try {
-    const users = await User.find();
-    res.send(users);
-  } catch (error) {
-    console.error(err);
-    res.status(400).send({ error: err, msg: err.message });
-  }
+//get all ♥
+function getAll() {
+  const users = User.find();
+  return users;
 }
 
 async function getById(id) {
@@ -43,7 +34,6 @@ async function getById(id) {
   }
 }
 
-//borrar usuario por id
 async function deleteById(id) {
   try {
     const user = await User.findByIdAndDelete(id);

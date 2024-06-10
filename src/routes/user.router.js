@@ -1,6 +1,5 @@
 const express = require("express");
 const userUseCase = require("../usecases/user.usecase");
-const { response } = require("../server");
 
 const router = express.Router();
 
@@ -15,10 +14,28 @@ router.get("/", async (req, res) => {
       },
     });
   } catch (error) {
-    response.status(error.status || 500);
-    response.json({
+    res.status(error.status || 500);
+    res.json({
       success: false,
       message: error.message,
+    });
+  }
+});
+
+router.post("/", async (req, res) => {
+  try {
+    const newUser = await userUseCase.create(req.body);
+    res.status(201).json({
+      success: true,
+      message: "User created",
+      data: {
+        user: newUser,
+      },
+    });
+  } catch (error) {
+    res.status(400).json({
+      success: false,
+      message: error.message || "Internal Server Error",
     });
   }
 });
