@@ -22,6 +22,25 @@ router.get("/", async (req, res) => {
   }
 });
 
+router.get("/:id", async (req, res) => {
+  try {
+    const user = await userUseCase.getById(req.params.id);
+    res.json({
+      success: true,
+      message: "user id found",
+      data: {
+        users: user,
+      },
+    });
+  } catch (error) {
+    res.status(error.status || 500);
+    res.json({
+      success: false,
+      message: error.message,
+    });
+  }
+});
+
 router.post("/", async (req, res) => {
   try {
     const newUser = await userUseCase.create(req.body);
@@ -30,6 +49,44 @@ router.post("/", async (req, res) => {
       message: "User created",
       data: {
         user: newUser,
+      },
+    });
+  } catch (error) {
+    res.status(400).json({
+      success: false,
+      message: error.message || "Internal Server Error",
+    });
+  }
+});
+
+router.delete("/:id", async (req, res) => {
+  try {
+    const user = await userUseCase.getById(req.params.id);
+    res.status(200).json({
+      success: true,
+      message: "User deleted",
+      data: {
+        user: user,
+      },
+    });
+  } catch (error) {
+    res.status(400).json({
+      success: false,
+      message: error.message || "Internal Server Error",
+    });
+  }
+});
+
+router.put("/:id", async (req, res) => {
+  try {
+    const userID = req.params.id;
+    const updates = req.body;
+    const user = await userUseCase.update(userID, updates);
+    res.status(200).json({
+      success: true,
+      message: "User deleted",
+      data: {
+        user: user,
       },
     });
   } catch (error) {
