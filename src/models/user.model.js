@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
 const bcrypt = require("bcryptjs");
-const achievementsSchema = require("./model_achievements");
-const Sandia = require("./model_sandia");
+const achievementsSchema = require("./achievements.model");
+const Sandia = require("./sandia.model");
 
 const userSchema = new mongoose.Schema(
   {
@@ -30,7 +30,7 @@ const userSchema = new mongoose.Schema(
       default: 0,
     },
     sandiasFavoritas: {
-      type: [{ type: Schema.Types.ObjectId, ref: "Sandia" }],
+      type: [{ type: mongoose.Schema.Types.ObjectId, ref: "Sandia" }],
       default: [],
     },
     achievements: {
